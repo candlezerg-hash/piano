@@ -2,51 +2,103 @@
 <html lang="ko">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>한 소절 · 계이름 연습</title>
+<title>한 소절 · 계이름과 박자 연습</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f4f2ec;color:#253b36;font-family:"Malgun Gothic",sans-serif}main{max-width:1000px;margin:60px auto;padding:24px}.brand{font-size:13px;letter-spacing:3px;color:#668075}h1{font-size:38px;letter-spacing:-2px;margin:18px 0}p{color:#65756d;line-height:1.8}.controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:30px 0}select,button{font:inherit;border-radius:9px;padding:12px 18px;border:1px solid #cdd6ce;background:white;color:#253b36}button{cursor:pointer}button.primary{background:#315e4b;color:white;border-color:#315e4b}button:hover{filter:brightness(.96)}button:focus-visible,select:focus-visible{outline:3px solid #d5a749;outline-offset:3px}.card{background:white;border:1px solid #dce2d9;border-radius:16px;padding:26px;box-shadow:0 12px 40px #29422c08}.card-head{display:flex;justify-content:space-between;font-size:12px;color:#718277;gap:16px}.score{overflow-x:auto;padding:22px 0}svg{display:block;min-width:740px;width:100%;height:auto}#answer{font-size:20px;letter-spacing:3px;line-height:2;padding:18px;background:#edf3eb;border-radius:10px;margin-top:18px}#answer[hidden]{display:none}.tip{font-size:13px;margin-top:26px}.footer{border-top:1px solid #d9dfd5;margin-top:42px;padding-top:20px;font-size:12px;color:#78877b}@media(max-width:600px){main{margin:20px auto;padding:18px}h1{font-size:30px}.card{padding:16px}}
 </style>
+<style>
+select,button{min-height:48px;font-size:16px;touch-action:manipulation}select{max-width:100%;min-width:0}button:disabled,select:disabled{opacity:.55;cursor:default}main,.card,.score{min-width:0}.score{overflow:visible}.mobile-score{display:none}#answer{overflow-wrap:anywhere}h1{line-height:1.35;text-wrap:balance}.controls{margin:20px 0}.tip{line-height:2}
+@media(max-width:600px){
+ main{margin:12px auto;padding:16px;padding-bottom:max(24px,env(safe-area-inset-bottom))}h1{font-size:28px;letter-spacing:-1.3px;margin:14px 0}.brand{font-size:11px}main>p{font-size:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.controls label{grid-column:1/-1;font-size:13px;font-weight:bold}.controls select{grid-column:1/-1;width:100%;padding:12px}.controls button{width:100%;padding:12px 8px;font-size:14px;line-height:1.5}.card{padding:14px 10px;border-radius:12px}.card-head{font-size:11px;gap:8px;flex-wrap:wrap}.score{padding:12px 0}.desktop-score{display:none}.mobile-score{display:block}.mobile-score svg{min-width:0;width:100%}.measure-label{font-size:11px;color:#718277;margin:8px 4px 0}.mobile-score+.mobile-score{border-top:1px solid #edf0e8;padding-top:10px}#answer{padding:12px;margin-top:8px}.tip{font-size:12px}.footer{margin-top:26px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
 <main>
-<div class="brand">ONE LITTLE MELODY</div><h1>한 소절, 계이름 연습</h1>
-<p>악보를 보고 계이름을 소리 내어 읽어보세요.<br>새로운 악보를 눌러 다음 멜로디에 도전할 수 있어요.</p>
-<div class="controls"><label for="level">음역 </label><select id="level"><option value="basic">기초 · 도₄ ~ 솔₄</option><option value="full" selected>기본 · 도₄ ~ 도₅</option><option value="wide">확장 · 도₄ ~ 솔₅</option></select><button class="primary" id="new">↻ 새로운 악보</button><button id="toggle" aria-expanded="false" aria-controls="answer">계이름 정답 보기</button></div>
+<div class="brand">ONE LITTLE MELODY</div><h1>한 소절, 계이름과 박자 연습</h1>
+<p>악보를 보고 계이름과 박자를 소리 내어 읽어보세요.<br>새로운 악보를 눌러 다음 멜로디에 도전할 수 있어요.</p>
+<div class="controls"><label for="mode">연습 종류</label><select id="mode"><option value="notes">계이름 · 덧줄 연습</option><option value="rhythm" selected>박자 연습</option><option value="both">계이름 + 박자 함께</option></select></div>
+<div class="controls"><label for="level">음역 </label><select id="level"><option value="basic">기초 · 도₄ ~ 솔₄</option><option value="full">기본 · 도₄ ~ 도₅</option><option value="wide">확장 · 도₄ ~ 솔₅</option><option value="low">아래 덧줄 · 도₃ ~ 도₄</option><option value="high">위 덧줄 · 라₅ ~ 도₆</option><option value="outside" selected>위아래 덧줄 집중</option><option value="mixed">전체 혼합 · 도₃ ~ 도₆</option></select><button class="primary" id="new">↻ 새로운 악보</button><button id="toggle" aria-expanded="false" aria-controls="answer">계이름 정답 보기</button></div>
 <section class="card" aria-label="연습 악보"><div class="card-head"><span>높은음자리표 · 도장조 · 4/4박자</span><span id="number" aria-live="polite"></span></div><div class="score" id="score"></div><div id="answer" hidden></div></section>
-<p class="tip">모든 음표는 4분음표입니다. | 는 마디 구분이에요.<br>도₄는 가운데 도, 도₅는 그보다 한 옥타브 높은 도입니다. 음표 위치가 높아지는 순서대로 도–레–미–파–솔–라–시가 반복됩니다.</p>
+<p class="tip"><strong>박자 읽기:</strong> 4분음표는 딴(1박), 2분음표는 따안(2박), 온음표는 따아아안(4박)으로 읽습니다.<br>예: 따안은 1–2박 동안 한 번의 소리를 이어 읽습니다. 글자 길이보다 일정한 박을 유지하는 것이 중요해요.<br>박자 연습은 음높이를 시₄로 고정합니다. 한 마디는 항상 4박이고, 쉼표와 8분음표는 이번 연습에 포함하지 않습니다.<br><strong>덧줄 읽기:</strong> 오선 밖의 짧은 가로선이 덧줄입니다. 도₃ → 도₄ → 도₅ → 도₆는 각각 한 옥타브 차이이며 도₄는 가운데 도입니다.<br>위아래 덧줄 집중 모드에는 양쪽 음이 반드시 나옵니다. 계이름만 연습할 때는 모든 음표가 4분음표입니다.</p>
 <div class="footer">오프라인 사용 가능 · 설치 및 로그인 불필요 · 새 악보를 만들면 이전 정답은 자동으로 숨겨집니다.</div>
 </main>
 <script>
 'use strict';
-const names=['도₄','레₄','미₄','파₄','솔₄','라₄','시₄','도₅','레₅','미₅','파₅','솔₅'];
-let melody=[],serial=0;
+const syllables=['도','레','미','파','솔','라','시'];
+function noteName(pitch){const degree=((pitch%7)+7)%7;return syllables[degree]+String(4+Math.floor(pitch/7)).replace(/[0-9]/g,n=>'₀₁₂₃₄₅₆₇₈₉'[Number(n)]);}
+let melody=[],serial=0,events=[];
+const rhythmNames={1:'딴',2:'따안',4:'따아아안'};
+const rhythmPatterns=[[1,1,1,1],[2,1,1],[1,2,1],[1,1,2],[2,2],[4]];
+function makeEvents(mode){
+ const measures=Array.from({length:2},()=>mode==='notes'?[1,1,1,1]:rhythmPatterns[Math.floor(Math.random()*rhythmPatterns.length)]);
+ // Include a held note in every rhythm exercise.
+ if(mode!=='notes'&&measures.every(bar=>bar.every(duration=>duration===1)))measures[1]=[2,2];
+ return measures.flatMap((durations,measure)=>{let beat=0;return durations.map(duration=>{const event={duration,measure,beat};beat+=duration;return event;});});
+}
 const ns='http://www.w3.org/2000/svg';
 function shape(tag,attrs,parent){const el=document.createElementNS(ns,tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);parent.append(el);return el;}
 function line(svg,x1,y1,x2,y2,width=1.2){shape('line',{x1,y1,x2,y2,stroke:'#27382f','stroke-width':width},svg);}
+function drawBar(svg,x,kind){
+ if(kind==='single')line(svg,x,60,x,140);
+ else{line(svg,x-5,60,x-5,140);line(svg,x+5,60,x+5,140,kind==='final'?4:1.2);}
+}
 function generate(){
- const max={basic:4,full:7,wide:11}[document.querySelector('#level').value];
- let next;do{next=Array.from({length:8},()=>Math.floor(Math.random()*(max+1)));}while(next.join()===melody.join());melody=next;serial++;
+ const mode=document.querySelector('#mode').value;
+ document.querySelector('#level').disabled=mode==='rhythm';
+ events=makeEvents(mode);
+ const level=document.querySelector('#level').value;
+ const [min,max]={basic:[0,4],full:[0,7],wide:[0,11],low:[-7,0],high:[12,14],outside:[-7,14],mixed:[-7,14]}[level];
+ const pool=Array.from({length:max-min+1},(_,i)=>min+i).filter(p=>level!=='outside'||p<=0||p>=12);
+ let next;
+ if(mode==='rhythm')next=events.map(()=>6);
+ else do{next=events.map(()=>pool[Math.floor(Math.random()*pool.length)]);}while(next.join()===melody.join()||(level==='outside'&&(!next.some(p=>p<=0)||!next.some(p=>p>=12))));
+ melody=next;serial++;
  const container=document.querySelector('#score');container.replaceChildren();
- const svg=shape('svg',{viewBox:'0 0 900 220',role:'img','aria-label':'무작위 멜로디 연습 악보. 계이름 정답은 아래 버튼으로 확인할 수 있습니다.'},container);
- for(let y=60;y<=140;y+=20)line(svg,20,y,875,y);
+ function renderScore(parent,measure=null){
+ const compact=measure!==null;
+ const svg=shape('svg',{viewBox:`0 0 ${compact?510:900} 280`,class:compact?'':'desktop-score',role:'img','aria-label':compact?`${measure+1}마디 연습 악보`:'무작위 계이름 및 박자 연습 악보. 정답 보기 버튼으로 읽는 법을 확인할 수 있습니다.'},parent);
+ for(let y=60;y<=140;y+=20)line(svg,20,y,compact?490:875,y);
  // Clef is drawn as a vector path so no network font is needed.
  shape('path',{d:'M 67 166 C 90 158 85 131 75 105 C 63 75 53 36 67 23 C 87 36 74 63 56 84 C 24 117 37 145 61 145 C 88 145 94 112 73 103 C 52 94 44 119 58 127 M 67 23 C 63 65 62 106 72 155 C 78 188 49 193 46 174 C 45 161 60 160 61 171',fill:'none',stroke:'#27382f','stroke-width':4.5,'stroke-linecap':'round'},svg);
  shape('text',{x:104,y:93,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent='4';
  shape('text',{x:104,y:132,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent='4';
  melody.forEach((pitch,i)=>{
-  const x=164+i*88+(i>=4?12:0),y=160-pitch*10;
+  const event=events[i];
+  if(compact&&event.measure!==measure)return;
+  const x=164+(compact?0:event.measure*365)+event.beat*78,y=160-pitch*10;
   // Staff lines: E4=140, G4=120, B4=100, D5=80, F5=60.
   for(let ledger=160;ledger<=y;ledger+=20)line(svg,x-17,ledger,x+17,ledger);
   for(let ledger=40;ledger>=y;ledger-=20)line(svg,x-17,ledger,x+17,ledger);
-  shape('ellipse',{cx:x,cy:y,rx:12,ry:8,fill:'#27382f',transform:`rotate(-18 ${x} ${y})`},svg);
-  const down=pitch>=6;line(svg,down?x-11:x+11,y,down?x-11:x+11,y+(down?58:-58),2);
+  shape('ellipse',{cx:x,cy:y,rx:event.duration===4?15:12,ry:8,fill:event.duration===1?'#27382f':'white',stroke:'#27382f','stroke-width':2,transform:`rotate(-18 ${x} ${y})`},svg);
+  if(event.duration!==4){const down=pitch>=6;line(svg,down?x-11:x+11,y,down?x-11:x+11,y+(down?58:-58),2);}
  });
- line(svg,490,60,490,140);line(svg,864,60,864,140);line(svg,874,60,874,140,4);
+ if(compact)drawBar(svg,485,measure===1?'final':'single');
+ else{drawBar(svg,490,'single');drawBar(svg,869,'final');}
+ }
+ renderScore(container);
+ for(let measure=0;measure<2;measure++){
+  const panel=document.createElement('div');panel.setAttribute('class','mobile-score');
+  const label=document.createElement('div');label.setAttribute('class','measure-label');label.textContent=`${measure+1}마디`;panel.append(label);
+  renderScore(panel,measure);container.append(panel);
+ }
  document.querySelector('#number').textContent=`연습 ${serial} · 2마디`;
- document.querySelector('#answer').textContent=melody.map((p,i)=>(i===4?' | ':'')+names[p]).join('  ');
- document.querySelector('#answer').hidden=true;document.querySelector('#toggle').textContent='계이름 정답 보기';document.querySelector('#toggle').setAttribute('aria-expanded','false');
+ const answer=document.querySelector('#answer');answer.replaceChildren();
+ for(let measure=0;measure<2;measure++){
+  const row=document.createElement('div');row.style.cssText='margin-bottom:16px;font-size:16px;letter-spacing:0;line-height:1.9';
+  const indexes=events.map((event,i)=>event.measure===measure?i:-1).filter(i=>i>=0);
+  const parts=[`${measure+1}마디`];
+  if(mode!=='rhythm')parts.push('계이름: '+indexes.map(i=>noteName(melody[i])).join(' · '));
+  parts.push('읽기: '+indexes.map(i=>rhythmNames[events[i].duration]).join(' / '));
+  parts.push('길이: '+indexes.map(i=>`${events[i].duration}박`).join(' / '));
+  parts.push('박 세기: '+indexes.map(i=>Array.from({length:events[i].duration},(_,j)=>events[i].beat+j+1).join('–')).join(' / '));
+  parts.forEach(text=>{const p=document.createElement('div');p.textContent=text;row.append(p);});answer.append(row);
+ }
+ answer.hidden=true;document.querySelector('#toggle').textContent='정답 · 읽는 법 보기';document.querySelector('#toggle').setAttribute('aria-expanded','false');
 }
+document.querySelector('#mode').addEventListener('change',generate);
 document.querySelector('#new').addEventListener('click',generate);
 document.querySelector('#level').addEventListener('change',generate);
-document.querySelector('#toggle').addEventListener('click',()=>{const answer=document.querySelector('#answer');answer.hidden=!answer.hidden;document.querySelector('#toggle').setAttribute('aria-expanded',String(!answer.hidden));document.querySelector('#toggle').textContent=answer.hidden?'계이름 정답 보기':'정답 숨기기';});
+document.querySelector('#toggle').addEventListener('click',()=>{const answer=document.querySelector('#answer');answer.hidden=!answer.hidden;document.querySelector('#toggle').setAttribute('aria-expanded',String(!answer.hidden));document.querySelector('#toggle').textContent=answer.hidden?'정답 · 읽는 법 보기':'정답 숨기기';});
 generate();
 </script>
 </html>

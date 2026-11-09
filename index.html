@@ -12,14 +12,21 @@ select,button{min-height:48px;font-size:16px;touch-action:manipulation}select{ma
  main{margin:12px auto;padding:16px;padding-bottom:max(24px,env(safe-area-inset-bottom))}h1{font-size:28px;letter-spacing:-1.3px;margin:14px 0}.brand{font-size:11px}main>p{font-size:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.controls label{grid-column:1/-1;font-size:13px;font-weight:bold}.controls select{grid-column:1/-1;width:100%;padding:12px}.controls button{width:100%;padding:12px 8px;font-size:14px;line-height:1.5}.card{padding:14px 10px;border-radius:12px}.card-head{font-size:11px;gap:8px;flex-wrap:wrap}.score{padding:12px 0}.desktop-score{display:none}.mobile-score{display:block}.mobile-score svg{min-width:0;width:100%}.measure-label{font-size:11px;color:#718277;margin:8px 4px 0}.mobile-score+.mobile-score{border-top:1px solid #edf0e8;padding-top:10px}#answer{padding:12px;margin-top:8px}.tip{font-size:12px}.footer{margin-top:26px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+.rest-examples{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}.rest-example{text-align:center;background:#f5f7f0;border-radius:10px;padding:10px 4px;font-size:12px}.rest-example svg{min-width:0;width:70px;max-width:100%;height:90px;margin:auto}.rest-guide{margin-top:20px;font-size:14px;line-height:1.8}.rest-guide summary{cursor:pointer;padding:12px 0;font-weight:bold}
 </style>
 <main>
 <div class="brand">ONE LITTLE MELODY</div><h1>한 소절, 계이름과 박자 연습</h1>
 <p>악보를 보고 계이름과 박자를 소리 내어 읽어보세요.<br>새로운 악보를 눌러 다음 멜로디에 도전할 수 있어요.</p>
 <div class="controls"><label for="mode">연습 종류</label><select id="mode"><option value="notes">계이름 · 덧줄 연습</option><option value="rhythm" selected>박자 연습</option><option value="both">계이름 + 박자 함께</option></select></div>
+<div class="controls"><label for="meter">박자표</label><select id="meter"><option value="2/4">2/4 · 4분음표 기준 두 박</option><option value="3/4">3/4 · 4분음표 기준 세 박</option><option value="4/4" selected>4/4 · 4분음표 기준 네 박</option><option value="6/8">6/8 · 세 개씩 묶는 큰 두 박</option></select></div>
+<p id="meter-help" class="tip" aria-live="polite"></p>
+<div class="controls"><label for="rhythm-level">리듬 난이도</label><select id="rhythm-level"><option value="basic">기초 · 긴 음 중심</option><option value="eighth">8분음표 포함</option><option value="sixteenth">16분음표 포함</option><option value="dotted" selected>점음표 집중 · 원래 길이 + 절반</option></select></div>
+<details class="rest-guide"><summary>점음표는 어떻게 읽나요?</summary><p>음표 오른쪽의 점은 <strong>원래 길이의 절반을 더하라</strong>는 뜻입니다. 4분음표를 1박으로 세면 점2분음표는 2 + 1 = <strong>3박</strong>, 점4분음표는 1 + ½ = <strong>1½박</strong>, 점8분음표는 ½ + ¼ = <strong>¾박</strong>입니다.<br>예: 점4분음표 + 8분음표 = 1½ + ½ = 2박. “1–앤–2 / 앤”으로 세면서, / 앞까지 한 소리를 끊지 않고 유지하세요.<br>점8분음표 + 16분음표 = ¾ + ¼ = 1박. “1–이–앤 / 아”로 읽습니다. 점에서 소리를 다시 내지 않습니다.<br>6/8에서는 점4분음표가 큰 1박입니다. 정답의 길이 기준을 확인하세요. 읽는 소리는 연습용이며, 정확한 길이는 숫자로 센 박을 따릅니다.</p></details>
+<div class="controls"><label for="rest-mode">쉼표 연습</label><select id="rest-mode"><option value="off">음표만</option><option value="mixed" selected>음표 + 쉼표 섞기</option></select></div>
 <div class="controls"><label for="level">음역 </label><select id="level"><option value="basic">기초 · 도₄ ~ 솔₄</option><option value="full">기본 · 도₄ ~ 도₅</option><option value="wide">확장 · 도₄ ~ 솔₅</option><option value="low">아래 덧줄 · 도₃ ~ 도₄</option><option value="high">위 덧줄 · 라₅ ~ 도₆</option><option value="outside" selected>위아래 덧줄 집중</option><option value="mixed">전체 혼합 · 도₃ ~ 도₆</option></select><button class="primary" id="new">↻ 새로운 악보</button><button id="toggle" aria-expanded="false" aria-controls="answer">계이름 정답 보기</button></div>
-<section class="card" aria-label="연습 악보"><div class="card-head"><span>높은음자리표 · 도장조 · 4/4박자</span><span id="number" aria-live="polite"></span></div><div class="score" id="score"></div><div id="answer" hidden></div></section>
-<p class="tip"><strong>박자 읽기:</strong> 4분음표는 딴(1박), 2분음표는 따안(2박), 온음표는 따아아안(4박)으로 읽습니다.<br>예: 따안은 1–2박 동안 한 번의 소리를 이어 읽습니다. 글자 길이보다 일정한 박을 유지하는 것이 중요해요.<br>박자 연습은 음높이를 시₄로 고정합니다. 한 마디는 항상 4박이고, 쉼표와 8분음표는 이번 연습에 포함하지 않습니다.<br><strong>덧줄 읽기:</strong> 오선 밖의 짧은 가로선이 덧줄입니다. 도₃ → 도₄ → 도₅ → 도₆는 각각 한 옥타브 차이이며 도₄는 가운데 도입니다.<br>위아래 덧줄 집중 모드에는 양쪽 음이 반드시 나옵니다. 계이름만 연습할 때는 모든 음표가 4분음표입니다.</p>
+<section class="card" aria-label="연습 악보"><div class="card-head"><span id="score-heading">높은음자리표 · 도장조</span><span id="number" aria-live="polite"></span></div><div class="score" id="score"></div><div id="answer" hidden></div></section>
+<details class="rest-guide"><summary>쉼표 모양과 연습 방법 보기</summary><p>쉼표에서는 소리를 내지 않고, 속으로 박을 계속 셉니다. 정답의 “쉼”은 읽어야 할 소리가 아니라 침묵하라는 표시예요. 음표와 같은 길이만큼 쉬고 다음 음을 시작하세요.</p><div class="rest-examples" id="rest-examples"></div><p>아래 길이는 4분음표를 1박으로 셌을 때의 값입니다. 6/8에서는 정답의 큰 박 기준 길이를 보세요. 온쉼표는 넷째 줄 아래에 매달리고, 2분쉼표는 셋째 줄 위에 놓입니다.</p></details>
+<p class="tip"><strong>읽기 약속:</strong> 4분음표 딴, 2분음표 따안, 온음표 따아아안, 8분음표 따, 16분음표 뜨, 점4분음표 따아안. 소리는 연습용 약속이며 정확한 길이는 정답의 박 세기를 따라주세요.<br><strong>2/4·3/4·4/4:</strong> 4분음표가 1박입니다. 8분음표 두 개(따 따), 16분음표 네 개(뜨 뜨 뜨 뜨)가 각각 1박입니다. “1 앤” 또는 “1 이 앤 아”로 나눠 셉니다.<br><strong>6/8:</strong> 8분음표 6개 길이를 3개씩 묶어 큰 두 박으로 느낍니다. “1 라 리 / 2 라 리”로 세며, 16분음표는 각 칸에 “앤”을 넣어 더 나눕니다. 점4분음표 1개가 큰 1박이고, 8분음표 1개는 큰 박의 ⅓입니다.<br>3/4와 6/8은 한 마디의 음표 길이 합은 같지만, 3/4는 2개씩 세 묶음, 6/8은 3개씩 두 묶음으로 느낍니다.<br>8분음표는 꼬리 1개, 16분음표는 꼬리 2개, 점4분음표는 음표 옆 점으로 표시합니다. 정답의 / 는 새로운 음의 시작이고 – 는 한 음을 이어 읽는 구간입니다.<br>박자 전용 모드는 시₄로 고정합니다. 쉼표 섞기를 선택하면 매번 쉼표와 음표가 함께 나옵니다. 붙임줄·셋잇단음표는 포함하지 않습니다. 6/8의 기초 모드에도 박 묶음을 배우기 위한 점4분음표와 8분음표가 포함됩니다.<br><strong>덧줄:</strong> 오선 밖의 짧은 가로선입니다. 도₄는 가운데 도이며, 숫자가 1 커지면 한 옥타브 높아집니다. 위아래 덧줄 집중에는 양쪽 음이 모두 나옵니다.</p>
 <div class="footer">오프라인 사용 가능 · 설치 및 로그인 불필요 · 새 악보를 만들면 이전 정답은 자동으로 숨겨집니다.</div>
 </main>
 <script>
@@ -27,12 +34,43 @@ select,button{min-height:48px;font-size:16px;touch-action:manipulation}select{ma
 const syllables=['도','레','미','파','솔','라','시'];
 function noteName(pitch){const degree=((pitch%7)+7)%7;return syllables[degree]+String(4+Math.floor(pitch/7)).replace(/[0-9]/g,n=>'₀₁₂₃₄₅₆₇₈₉'[Number(n)]);}
 let melody=[],serial=0,events=[];
-const rhythmNames={1:'딴',2:'따안',4:'따아아안'};
+const rhythmNames={0.25:'뜨',0.5:'따',0.75:'따아',1:'딴',1.5:'따아안',2:'따안',3:'따아안(길게)',4:'따아아안'};
+const dottedBases={0.75:0.5,1.5:1,3:2};
+const noteNames={0.25:'16분음표',0.5:'8분음표',0.75:'점8분음표',1:'4분음표',1.5:'점4분음표',2:'2분음표',3:'점2분음표',4:'온음표'};
+function durationLabel(duration){return ({0.25:'¼',0.5:'½',0.75:'¾',1.5:'1½'}[duration])??String(duration);}
+function getMeter(){const value=document.querySelector('#meter').value;const [top,bottom]=(value.includes('/')?value:'4/4').split('/').map(Number);return {top,bottom,total:top*4/bottom,compound:bottom===8};}
 const rhythmPatterns=[[1,1,1,1],[2,1,1],[1,2,1],[1,1,2],[2,2],[4]];
+const eighthPatterns=[[0.5,0.5,1,2],[1,0.5,0.5,2],[2,1,0.5,0.5],[0.5,0.5,0.5,0.5,1,1],[1,1,0.5,0.5,0.5,0.5],[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]];
+const sixteenthPatterns=[[0.25,0.25,0.25,0.25,1,2],[1,0.25,0.25,0.25,0.25,2],[2,1,0.25,0.25,0.25,0.25],[0.5,0.25,0.25,1,2],[1,0.25,0.25,0.5,2],[1,1,0.25,0.25,0.25,0.25,1]];
+function beatReading(event,subdivision){
+ if(getMeter().compound){
+  const step=subdivision===4?0.25:0.5;
+  return Array.from({length:event.duration/step},(_,i)=>{
+   const tick=Math.round((event.beat+i*step)*4),slot=Math.floor((tick%6)/2);
+   return tick%2?'앤':slot===0?String(Math.floor(tick/6)+1):slot===1?'라':'리';
+  }).join('–');
+ }
+ const ticks=Array.from({length:event.duration*subdivision},(_,i)=>event.beat*subdivision+i);
+ return ticks.map(tick=>tick%subdivision===0?String(Math.floor(tick/subdivision)+1):subdivision===2?'앤':['','이','앤','아'][tick%4]).join('–');
+}
 function makeEvents(mode){
- const measures=Array.from({length:2},()=>mode==='notes'?[1,1,1,1]:rhythmPatterns[Math.floor(Math.random()*rhythmPatterns.length)]);
+ const meter=getMeter();
+ const difficulty=document.querySelector('#rhythm-level').value;
+ let patterns;
+ if(meter.compound){
+  const groups=difficulty==='dotted'?[[0.75,0.25,0.5],[0.5,0.75,0.25],[1.5]]:difficulty==='sixteenth'?[[0.25,0.25,0.5,0.5],[0.5,0.25,0.25,0.5],[0.5,0.5,0.25,0.25]]:difficulty==='eighth'?[[0.5,0.5,0.5],[1,0.5],[0.5,1]]:[[1.5],[1,0.5],[0.5,1]];
+  const measures=Array.from({length:2},()=>mode==='notes'?[1.5,1.5]:Array.from({length:2},()=>groups[Math.floor(Math.random()*groups.length)]).flat());
+  return measures.flatMap((durations,measure)=>{let beat=0;return durations.map(duration=>{const event={duration,measure,beat};beat+=duration;return event;});});
+ }
+ if(difficulty==='dotted')patterns={2:[[1.5,0.5],[0.75,0.25,1],[1,0.75,0.25]],3:[[3],[1.5,0.5,1],[1,0.75,0.25,1]],4:[[3,1],[1,3],[1.5,0.5,2],[1,1,0.75,0.25,1],[0.75,0.25,1,2]]}[meter.total];
+ else if(meter.total===4)patterns=difficulty==='sixteenth'?sixteenthPatterns:difficulty==='eighth'?eighthPatterns:rhythmPatterns;
+ else{
+  const short=difficulty==='sixteenth'?[[0.25,0.25,0.25,0.25],[0.5,0.25,0.25],[0.25,0.25,0.5]]:[[0.5,0.5]];
+  patterns=difficulty==='basic'||!['eighth','sixteenth'].includes(difficulty)?(meter.total===2?[[2],[1,1]]:[[2,1],[1,2],[1,1,1]]):short.map(group=>[...group,...Array(meter.total-1).fill(1)]);
+ }
+ const measures=Array.from({length:2},()=>mode==='notes'?Array(meter.total).fill(1):patterns[Math.floor(Math.random()*patterns.length)]);
  // Include a held note in every rhythm exercise.
- if(mode!=='notes'&&measures.every(bar=>bar.every(duration=>duration===1)))measures[1]=[2,2];
+ if(mode!=='notes'&&measures.every(bar=>bar.every(duration=>duration===1)))measures[1]=meter.total===4?[2,2]:meter.total===3?[2,1]:[2];
  return measures.flatMap((durations,measure)=>{let beat=0;return durations.map(duration=>{const event={duration,measure,beat};beat+=duration;return event;});});
 }
 const ns='http://www.w3.org/2000/svg';
@@ -42,16 +80,55 @@ function drawBar(svg,x,kind){
  if(kind==='single')line(svg,x,60,x,140);
  else{line(svg,x-5,60,x-5,140);line(svg,x+5,60,x+5,140,kind==='final'?4:1.2);}
 }
+const restNames={0.25:'16분쉼표',0.5:'8분쉼표',0.75:'점8분쉼표',1:'4분쉼표',1.5:'점4분쉼표',2:'2분쉼표',3:'점2분쉼표',4:'온쉼표'};
+function drawRest(svg,x,duration){
+ const group=shape('g',{transform:`translate(${x} 0)`,'data-rest':duration},svg);
+ const dotted=duration in dottedBases;
+ if(dotted)shape('circle',{cx:22,cy:90,r:3,fill:'#27382f','data-rest-dot':true},group);
+ duration=dottedBases[duration]??duration;
+ if(duration===4)shape('rect',{x:-12,y:80,width:24,height:9,fill:'#27382f'},group);
+ else if(duration===2)shape('rect',{x:-12,y:91,width:24,height:9,fill:'#27382f'},group);
+ else if(duration>=1){
+  shape('path',{d:'M 2 73 L 12 86 L 3 100 L 12 114 C -4 106 -12 113 -4 128 C -20 119 -15 102 1 105 L -10 93 L 1 80 Z',fill:'#27382f'},group);
+ }else{
+  const count=duration===0.25?2:1;
+  line(group,12,82,0,count===2?139:122,2.5);
+  for(let i=0;i<count;i++){
+   const y=88+i*17;
+   shape('circle',{cx:0-i*4,cy:y,r:5,fill:'#27382f'},group);
+   shape('path',{d:`M ${-i*4} ${y+3} Q 7 ${y+9} ${12-i*4} ${y-5}`,fill:'none',stroke:'#27382f','stroke-width':2.5},group);
+  }
+ }
+}
+function addRests(){
+ if(document.querySelector('#rest-mode').value!=='mixed')return;
+ // Keep at least two sounding notes so both ledger ranges remain possible.
+ if(events.length<3){
+  const index=events.findIndex(event=>event.duration>=1);
+  const event=events[index],first=event.duration===1.5?1:event.duration/2;
+  events.splice(index,1,{...event,duration:first},{...event,beat:event.beat+first,duration:event.duration-first});
+ }
+ const protectedDot=document.querySelector('#rhythm-level').value==='dotted'?events.findIndex(event=>event.duration in dottedBases):-1;
+ const shuffled=events.map((_,i)=>i).filter(i=>i!==protectedDot);
+ for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+ const count=Math.max(1,Math.min(events.length-2,Math.round(events.length*.35)));
+ shuffled.slice(0,count).forEach(index=>{events[index].rest=true;});
+}
 function generate(){
+ const meter=getMeter();
+ document.querySelector('#score-heading').textContent=`높은음자리표 · 도장조 · ${meter.top}/${meter.bottom}박자`;
+ document.querySelector('#meter-help').textContent=meter.compound?'6/8: 8분음표 6개 = 점4분음표 2개. 큰 박을 “하나, 둘”로 느끼며 “1 라 리 / 2 라 리”로 나눠 세세요.':'4분음표가 1박입니다. 한 마디를 '+Array.from({length:meter.top},(_,i)=>i+1).join(' · ')+'로 세세요. 음표 모양과 길이 비율은 그대로이고 한 마디의 박 수가 달라집니다.';
  const mode=document.querySelector('#mode').value;
  document.querySelector('#level').disabled=mode==='rhythm';
+ document.querySelector('#rhythm-level').disabled=mode==='notes';
  events=makeEvents(mode);
+ addRests();
  const level=document.querySelector('#level').value;
  const [min,max]={basic:[0,4],full:[0,7],wide:[0,11],low:[-7,0],high:[12,14],outside:[-7,14],mixed:[-7,14]}[level];
  const pool=Array.from({length:max-min+1},(_,i)=>min+i).filter(p=>level!=='outside'||p<=0||p>=12);
  let next;
  if(mode==='rhythm')next=events.map(()=>6);
- else do{next=events.map(()=>pool[Math.floor(Math.random()*pool.length)]);}while(next.join()===melody.join()||(level==='outside'&&(!next.some(p=>p<=0)||!next.some(p=>p>=12))));
+ else do{next=events.map(event=>event.rest?6:pool[Math.floor(Math.random()*pool.length)]);}while(next.join()===melody.join()||(level==='outside'&&(!next.some((p,i)=>!events[i].rest&&p<=0)||!next.some((p,i)=>!events[i].rest&&p>=12))));
  melody=next;serial++;
  const container=document.querySelector('#score');container.replaceChildren();
  function renderScore(parent,measure=null){
@@ -60,17 +137,32 @@ function generate(){
  for(let y=60;y<=140;y+=20)line(svg,20,y,compact?490:875,y);
  // Clef is drawn as a vector path so no network font is needed.
  shape('path',{d:'M 67 166 C 90 158 85 131 75 105 C 63 75 53 36 67 23 C 87 36 74 63 56 84 C 24 117 37 145 61 145 C 88 145 94 112 73 103 C 52 94 44 119 58 127 M 67 23 C 63 65 62 106 72 155 C 78 188 49 193 46 174 C 45 161 60 160 61 171',fill:'none',stroke:'#27382f','stroke-width':4.5,'stroke-linecap':'round'},svg);
- shape('text',{x:104,y:93,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent='4';
- shape('text',{x:104,y:132,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent='4';
+ shape('text',{x:104,y:93,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent=meter.top;
+ shape('text',{x:104,y:132,'font-size':30,'font-family':'serif','font-weight':'bold'},svg).textContent=meter.bottom;
  melody.forEach((pitch,i)=>{
   const event=events[i];
   if(compact&&event.measure!==measure)return;
-  const x=164+(compact?0:event.measure*365)+event.beat*78,y=160-pitch*10;
+  const inMeasure=events.filter(e=>e.measure===event.measure);
+  const position=inMeasure.indexOf(event);
+  const groupGap=meter.compound?12:0;
+  const groupStart=event.beat>=1.5?groupGap:0;
+  const x=164+(compact?0:event.measure*365)+position*(300-groupGap)/inMeasure.length+groupStart,y=160-pitch*10;
+  if(event.rest){drawRest(svg,x,event.duration);return;}
   // Staff lines: E4=140, G4=120, B4=100, D5=80, F5=60.
   for(let ledger=160;ledger<=y;ledger+=20)line(svg,x-17,ledger,x+17,ledger);
   for(let ledger=40;ledger>=y;ledger-=20)line(svg,x-17,ledger,x+17,ledger);
-  shape('ellipse',{cx:x,cy:y,rx:event.duration===4?15:12,ry:8,fill:event.duration===1?'#27382f':'white',stroke:'#27382f','stroke-width':2,transform:`rotate(-18 ${x} ${y})`},svg);
-  if(event.duration!==4){const down=pitch>=6;line(svg,down?x-11:x+11,y,down?x-11:x+11,y+(down?58:-58),2);}
+  const baseDuration=dottedBases[event.duration]??event.duration;
+  shape('ellipse',{cx:x,cy:y,rx:baseDuration===4?15:10,ry:7,fill:baseDuration<=1?'#27382f':'white',stroke:'#27382f','stroke-width':2,transform:`rotate(-18 ${x} ${y})`},svg);
+  if(event.duration in dottedBases)shape('circle',{cx:x+20,cy:pitch%2===0?y-10:y,r:3,fill:'#27382f','data-dot':true},svg);
+  if(baseDuration!==4){
+   const down=pitch>=6,stemX=down?x-9:x+9,tip=y+(down?58:-58);
+   line(svg,stemX,y,stemX,tip,2);
+   const flags=baseDuration===0.25?2:baseDuration===0.5?1:0;
+   for(let flag=0;flag<flags;flag++){
+    const start=tip+(down?-flag*11:flag*11),sign=down?-1:1;
+    shape('path',{d:`M ${stemX} ${start} C ${stemX+18} ${start+sign*9}, ${stemX+22} ${start+sign*19}, ${stemX+12} ${start+sign*30} C ${stemX+16} ${start+sign*15}, ${stemX+5} ${start+sign*15}, ${stemX} ${start+sign*12} Z`,fill:'#27382f','data-flag':true},svg);
+   }
+  }
  });
  if(compact)drawBar(svg,485,measure===1?'final':'single');
  else{drawBar(svg,490,'single');drawBar(svg,869,'final');}
@@ -87,18 +179,36 @@ function generate(){
   const row=document.createElement('div');row.style.cssText='margin-bottom:16px;font-size:16px;letter-spacing:0;line-height:1.9';
   const indexes=events.map((event,i)=>event.measure===measure?i:-1).filter(i=>i>=0);
   const parts=[`${measure+1}마디`];
-  if(mode!=='rhythm')parts.push('계이름: '+indexes.map(i=>noteName(melody[i])).join(' · '));
-  parts.push('읽기: '+indexes.map(i=>rhythmNames[events[i].duration]).join(' / '));
-  parts.push('길이: '+indexes.map(i=>`${events[i].duration}박`).join(' / '));
-  parts.push('박 세기: '+indexes.map(i=>Array.from({length:events[i].duration},(_,j)=>events[i].beat+j+1).join('–')).join(' / '));
+  if(mode!=='rhythm')parts.push('계이름: '+indexes.map(i=>events[i].rest?'쉼':noteName(melody[i])).join(' · '));
+  parts.push('읽기: '+indexes.map(i=>events[i].rest?'[쉼 · 소리 없이]':rhythmNames[events[i].duration]).join(' / '));
+  parts.push('기호: '+indexes.map(i=>events[i].rest?restNames[events[i].duration]:noteNames[events[i].duration]).join(' / '));
+  if(meter.compound){
+   parts.push('길이(큰 박 기준): '+indexes.map(i=>({0.25:'⅙',0.5:'⅓',0.75:'½',1:'⅔',1.5:'1'}[events[i].duration])+'박').join(' / '));
+   parts.push('작은 칸(8분음표 기준): '+indexes.map(i=>`${events[i].duration*2}칸`).join(' / '));
+  }else parts.push('길이: '+indexes.map(i=>`${durationLabel(events[i].duration)}박`).join(' / '));
+  const subdivision=events.some(e=>e.duration%0.5!==0)?4:events.some(e=>e.duration%1!==0)?2:1;
+  parts.push('박 세기: '+indexes.map(i=>(events[i].rest?'(속으로) ':'')+beatReading(events[i],subdivision)).join(' / '));
   parts.forEach(text=>{const p=document.createElement('div');p.textContent=text;row.append(p);});answer.append(row);
  }
  answer.hidden=true;document.querySelector('#toggle').textContent='정답 · 읽는 법 보기';document.querySelector('#toggle').setAttribute('aria-expanded','false');
 }
 document.querySelector('#mode').addEventListener('change',generate);
+document.querySelector('#meter').addEventListener('change',generate);
+document.querySelector('#rhythm-level').addEventListener('change',generate);
+document.querySelector('#rest-mode').addEventListener('change',generate);
 document.querySelector('#new').addEventListener('click',generate);
 document.querySelector('#level').addEventListener('change',generate);
 document.querySelector('#toggle').addEventListener('click',()=>{const answer=document.querySelector('#answer');answer.hidden=!answer.hidden;document.querySelector('#toggle').setAttribute('aria-expanded',String(!answer.hidden));document.querySelector('#toggle').textContent=answer.hidden?'정답 · 읽는 법 보기':'정답 숨기기';});
+for(const duration of [4,2,1,0.5,0.25,1.5,3,0.75]){
+ const item=document.createElement('div');item.setAttribute('class','rest-example');
+ const svg=shape('svg',{viewBox:'0 50 70 100',role:'img','aria-label':restNames[duration]},item);
+ for(let y=60;y<=140;y+=20)line(svg,4,y,66,y);
+ drawRest(svg,30,duration);
+ const label=document.createElement('div');label.textContent=`${restNames[duration]} · ${duration}박`;item.append(label);
+ document.querySelector('#rest-examples').append(item);
+}
 generate();
 </script>
 </html>
+
+
